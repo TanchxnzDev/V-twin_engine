@@ -12,10 +12,10 @@ app = FastAPI(
     version="0.1.0"
 )
 
-# Set up CORS for Next.js frontend
+# Set up CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=["*"], # อนุญาตให้ทุกที่เข้าถึงได้ (เหมาะสำหรับช่วงพัฒนาระบบ)
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -27,6 +27,24 @@ async def health_check():
         "status": "online",
         "engine": "V-Twin",
         "message": "Engine is purring like a Harley!"
+    }
+
+@app.post("/api/v1/analyze")
+async def analyze_lab(payload: dict):
+    # ในอนาคตเราจะเอา AI จริงๆ มาใส่ตรงนี้ครับ
+    # ตอนนี้จำลอง Logic การสกัดข้อมูลเบื้องต้น
+    raw_text = payload.get("text", "")
+    return {
+        "markers": [
+            { "name": "Glucose", "value": 165, "unit": "mg/dL", "flag": "HIGH" },
+            { "name": "HbA1c", "value": 7.8, "unit": "%", "flag": "HIGH" },
+            { "name": "LDL", "value": 210, "unit": "mg/dL", "flag": "HIGH" }
+        ],
+        "axes": [
+            { "id": "D3", "name": "Insulin & Glucose", "domain": "Metabolic" },
+            { "id": "D1", "name": "Systemic Inflammation", "domain": "Immune" }
+        ],
+        "summary": "AI พบความผิดปกติในแกน Metabolic และ Immune แนะนำให้ติดตามผลอย่างใกล้ชิด"
     }
 
 if __name__ == "__main__":
