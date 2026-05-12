@@ -8,3 +8,4 @@ pydantic-settings
 httpx
 python-multipart
 gunicorn
+firebase-admin
